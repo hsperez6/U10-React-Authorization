@@ -12,8 +12,26 @@ const UserSignIn = () => {
   const [errors, setErrors] = useState([]);
 
   // event handlers
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const user = {
+      name: name.current.value,
+      username: username.current.value,
+      password: password.current.value
+    };
+
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type":"application/json; charset=utf-8"
+      },
+      body: JSON.stringify(user)
+    }
+
+    const response = await fetch("http://localhost:5000/api/users", fetchOptions);
+
+    console.log(response);
   }
 
   const handleCancel = (event) => {
