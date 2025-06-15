@@ -1,9 +1,10 @@
 import { useContext, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ThemeContext from '../context/ThemeContext';
 
 const UserSignIn = () => {
   const { accentColor } = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   // State
   const username = useRef(null);
@@ -11,14 +12,50 @@ const UserSignIn = () => {
   const [errors, setErrors] = useState([]);
 
   // Event Handlers
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const credentials = {
+      username: username.current.value,
+      password: password.current.value
+    }
+
+    const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
+
+    const fetchOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${encodedCredentials}`
+      },
+    }
+
+
+    try {
+      const response = await fetch("http://localhost:5000/api/users", fetchOptions);
+
+      if ( response.status === 200 ) {
+        
+        const user = await response.json();
+        console.log(`Success! ${user.username} is now signed in!`);
+        navigate("/authenticated");
+
+      } else if ( response.status === 401 ) {
+        setErrors(["Sign in was unsuccessfull"]);
+      } else {
+        throw new Error();
+      }
+
+    } catch (error) {
+      console.log(error);
+      navigate("/error");
+    }
+
 
   }
 
   const handleCancel = (event) => {
     event.preventDefault();
-
+    navigate("/");
   }
 
   return (

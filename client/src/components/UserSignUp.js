@@ -1,10 +1,10 @@
 import { useContext, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+import { Link, useNavigate } from "react-router-dom";
 import ThemeContext from "../context/ThemeContext";
 
 const UserSignIn = () => {
   const { accentColor } = useContext(ThemeContext);
-  const navigate = useNavigate();  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  const navigate = useNavigate();  
 
   // State
   const name = useRef(null);
@@ -30,7 +30,7 @@ const UserSignIn = () => {
       body: JSON.stringify(user),
     };
 
-    try {                   //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    try {                   
 
       const response = await fetch( "http://localhost:5000/api/users", fetchOptions);
   
