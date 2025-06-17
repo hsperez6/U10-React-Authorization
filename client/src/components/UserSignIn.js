@@ -31,9 +31,6 @@ const UserSignIn = () => {
       } else {
         setErrors(["Sign-in was unsuccessfull"]);
       }
-      // TODO: Get user from UserContext
-        // Success (user !== null) -> navigate to authenticated route
-        // Failure (user === null) -> update errors state
     } catch (error) {
       console.log(error);
       navigate("/error");

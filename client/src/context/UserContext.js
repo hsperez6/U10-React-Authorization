@@ -23,15 +23,19 @@ export const UserProvider = (props) => {
     );
 
     if (response.status === 200) {
+
       const user = await response.json();
-
       setAuthUser(user);
-
       return user;
+
     } else if (response.status === 401) {
+
       return null;
+
     } else {
+
       throw new Error();
+      
     }
   };
 
