@@ -1,9 +1,12 @@
 import { useContext, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import ThemeContext from '../context/ThemeContext';
+import UserContext from '../context/UserContext';
 
 const UserSignIn = () => {
   const { accentColor } = useContext(ThemeContext);
+  const { actions } = useContext(UserContext);
   const navigate = useNavigate();
 
   // State
@@ -20,31 +23,17 @@ const UserSignIn = () => {
       password: password.current.value
     }
 
-    const encodedCredentials = btoa(`${credentials.username}:${credentials.password}`);
-
-    const fetchOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Basic ${encodedCredentials}`
-      },
-    }
-
-
     try {
-      const response = await fetch("http://localhost:5000/api/users", fetchOptions);
+      const user = await actions.signIn(credentials);
 
-      if ( response.status === 200 ) {
-        
-        const user = await response.json();
-        console.log(`Success! ${user.username} is now signed in!`);
-        navigate("/authenticated");
-
-      } else if ( response.status === 401 ) {
-        setErrors(["Sign in was unsuccessfull"]);
+      if ( user ) {
+        navigate("/authenticated")
       } else {
-        throw new Error();
+        setErrors(["Sign-in was unsuccessfull"]);
       }
-
+      // TODO: Get user from UserContext
+        // Success (user !== null) -> navigate to authenticated route
+        // Failure (user === null) -> update errors state
     } catch (error) {
       console.log(error);
       navigate("/error");
