@@ -35,11 +35,13 @@ export const UserProvider = (props) => {
     } else {
 
       throw new Error();
-      
+
     }
   };
 
-  const signOut = () => {};
+  const signOut = () => {
+    setAuthUser(null);
+  };
 
   return (
     <UserContext.Provider
@@ -47,6 +49,7 @@ export const UserProvider = (props) => {
         authUser,
         actions: {
           signIn,
+          signOut
         },
       }}
     >
