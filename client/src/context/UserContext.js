@@ -1,6 +1,8 @@
 import { createContext, useState } from "react";
 import Cookies from "js-cookie";
 
+import { api } from "../utils/apiHelper";
+
 const UserContext = createContext(null);
 
 export const UserProvider = (props) => {
@@ -9,21 +11,20 @@ export const UserProvider = (props) => {
   const [authUser, setAuthUser] = useState( cookie ? JSON.parse(cookie) : null);
 
   const signIn = async (credentials) => {
-    const encodedCredentials = btoa(
-      `${credentials.username}:${credentials.password}`
-    );
+    // const encodedCredentials = btoa(
+    //   `${credentials.username}:${credentials.password}`
+    // );
 
-    const fetchOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Basic ${encodedCredentials}`,
-      },
-    };
+    // const fetchOptions = {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Basic ${encodedCredentials}`,
+    //   },
+    // };
 
-    const response = await fetch(
-      "http://localhost:5000/api/users",
-      fetchOptions
-    );
+    const response = await api("/users", "GET", null, credentials);
+
+
 
     if (response.status === 200) {
       const user = await response.json();

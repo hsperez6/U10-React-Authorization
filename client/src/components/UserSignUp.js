@@ -1,6 +1,9 @@
 import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+import { api } from "../utils/apiHelper";
+
+import ErrorsDisplay from './ErrorsDisplay';
 import ThemeContext from "../context/ThemeContext";
 import UserContext from "../context/UserContext";
 
@@ -25,17 +28,17 @@ const UserSignIn = () => {
       password: password.current.value,
     };
 
-    const fetchOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(user),
-    };
+    // const fetchOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json; charset=utf-8",
+    //   },
+    //   body: JSON.stringify(user),
+    // };
 
     try {                   
 
-      const response = await fetch( "http://localhost:5000/api/users", fetchOptions);
+      const response = await api("/users", "POST", user);
   
       if ( response.status === 201 ) {
         
@@ -69,18 +72,7 @@ const UserSignIn = () => {
       <div className="grid-33 centered signin">
         <h1>Sign up</h1>
         <div>
-          {errors.length ? (
-            <div>
-              <h2 className="validation--errors--label">Validation errors</h2>
-              <div className="validation-errors">
-                <ul>
-                  {errors.map((error, i) => (
-                    <li key={i}>{error}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : null}
+          <ErrorsDisplay errors={errors} />
           <form onSubmit={handleSubmit}>
             <input
               id="name"
